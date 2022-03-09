@@ -6,24 +6,55 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 20:32:01 by coder             #+#    #+#             */
-/*   Updated: 2022/02/25 01:33:10 by coder            ###   ########.fr       */
+/*   Updated: 2022/03/09 21:51:36 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
+#include "pipex.h"
 
-int	main(int argc, char *argv)
+char	*get_command(char **cmd_paths, char *arg_cmd)
 {
-	char	**env;
+	char	*tmp;
+	char	*cmd;
+
+	while (*cmd_paths)
+	{
+		tmp = ft_strjoin(*cmd_paths, "/");
+		cmd = ft_strjoin(tmp, arg_cmd);
+		if (access(cmd, F_OK) == 0)
+			return (cmd);
+		cmd_paths++;
+	}
+	return (0);
+}
+
+char	*get_env(char **envp)
+{
+	char	*path_env;
+
+	while (*envp)
+	{
+		if (ft_strncmp("PATH", *envp, 4) == 0)
+		{
+			path_env = ft_strdup(*envp + 5);
+			return (path_env);
+		}
+		envp++;
+	}
+	return (0);
+}
+
+int	main(int argc [], char *argv [], char *envp [])
+{
+	char	*path_variable;
+	char	**all_variable_path;
+	char	*path_cmd;
 	char	**arr;
 
-	arr = malloc(2 * sizeof(char *));
-	env = malloc(2 * sizeof(char *));
-	env[0] = "TEST=teste";
-	env[1] = NULL;
-	arr[0] = "/bin/ls";
-	arr[1] = NULL;
-	execve("/bin/ls", arr, env);
+	path_variable = get_env(envp);
+	all_variable_path = ft_split(path_variable, ':');
+	arr = ft_split(argv[1], ' ');
+	path_cmd = get_command(all_variable_path, arr[0]);
+	execve(path_cmd, arr, all_variable_path);
 	return (0);
 }
