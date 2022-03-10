@@ -6,11 +6,11 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 02:06:19 by coder             #+#    #+#             */
-/*   Updated: 2022/03/09 18:06:44 by coder            ###   ########.fr       */
+/*   Updated: 2022/03/10 19:52:14 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../header/pipex.h"
 
 int	ft_strncmp(const char *s1, const char *s2, size_t len)
 {

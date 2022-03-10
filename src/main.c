@@ -6,11 +6,11 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 20:32:01 by coder             #+#    #+#             */
-/*   Updated: 2022/03/09 21:51:36 by coder            ###   ########.fr       */
+/*   Updated: 2022/03/10 19:59:09 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../header/pipex.h"
 
 char	*get_command(char **cmd_paths, char *arg_cmd)
 {
@@ -44,7 +44,7 @@ char	*get_env(char **envp)
 	return (0);
 }
 
-int	main(int argc [], char *argv [], char *envp [])
+int	main(int argc, char *argv [], char *envp [])
 {
 	char	*path_variable;
 	char	**all_variable_path;
@@ -53,8 +53,11 @@ int	main(int argc [], char *argv [], char *envp [])
 
 	path_variable = get_env(envp);
 	all_variable_path = ft_split(path_variable, ':');
-	arr = ft_split(argv[1], ' ');
-	path_cmd = get_command(all_variable_path, arr[0]);
-	execve(path_cmd, arr, all_variable_path);
+	if (argc > 1)
+	{
+		arr = ft_split(argv[1], ' ');
+		path_cmd = get_command(all_variable_path, arr[0]);
+		execve(path_cmd, arr, all_variable_path);
+	}
 	return (0);
 }

@@ -6,11 +6,11 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 16:07:53 by llopes-n          #+#    #+#             */
-/*   Updated: 2022/03/09 17:42:37 by coder            ###   ########.fr       */
+/*   Updated: 2022/03/10 19:52:09 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../header/pipex.h"
 
 static int	ft_numlettles(char *str, char delimiter)
 {
