@@ -6,27 +6,11 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 20:32:01 by coder             #+#    #+#             */
-/*   Updated: 2022/03/10 19:59:09 by coder            ###   ########.fr       */
+/*   Updated: 2022/03/12 01:43:33 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/pipex.h"
-
-char	*get_command(char **cmd_paths, char *arg_cmd)
-{
-	char	*tmp;
-	char	*cmd;
-
-	while (*cmd_paths)
-	{
-		tmp = ft_strjoin(*cmd_paths, "/");
-		cmd = ft_strjoin(tmp, arg_cmd);
-		if (access(cmd, F_OK) == 0)
-			return (cmd);
-		cmd_paths++;
-	}
-	return (0);
-}
 
 char	*get_env(char **envp)
 {
@@ -46,18 +30,28 @@ char	*get_env(char **envp)
 
 int	main(int argc, char *argv [], char *envp [])
 {
-	char	*path_variable;
-	char	**all_variable_path;
-	char	*path_cmd;
-	char	**arr;
+	char	*path_env;
+	t_pipex	pipex;
+	int		exit_code;
 
-	path_variable = get_env(envp);
-	all_variable_path = ft_split(path_variable, ':');
-	if (argc > 1)
-	{
-		arr = ft_split(argv[1], ' ');
-		path_cmd = get_command(all_variable_path, arr[0]);
-		execve(path_cmd, arr, all_variable_path);
-	}
+	pipex.infile = open(argv[1], O_RDONLY);
+	if (pipex.infile < 0)
+		error_exit("infile: No such file or directory", 0);
+	pipex.outfile = open(argv[argc - 1], O_TRUNC | O_RDWR | O_CREAT, 0644);
+	if (pipex.outfile < 0)
+		error_exit("outfile: Permission denied", 1);
+	pipe(pipex.pipe);
+	path_env = get_env(envp);
+	pipex.all_cmd_path = ft_split(path_env, ':');
+	pipex.pid1 = fork();
+	if (pipex.pid1 == 0)
+		pid1(pipex, argv, envp);
+	pipex.pid2 = fork();
+	if (pipex.pid2 == 0)
+		pid2(pipex, argv, envp);
+	close(pipex.pipe[0]);
+	close(pipex.pipe[1]);
+	waitpid(pipex.pid1, &exit_code, 0);
+	waitpid(pipex.pid2, &exit_code, 0);
 	return (0);
 }

@@ -3,7 +3,7 @@ CC				= gcc
 FLAGS			= -Wall -Wextra -Werror
 RM				= rm -rf
 
-SRC_F 			= main.c
+SRC_F 			= main.c childs.c error.c free.c
 SRC				= $(addprefix ./src/, $(SRC_F))
 OBJ_S			= $(SRC:.c=.o)
 
