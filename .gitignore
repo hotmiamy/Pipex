@@ -1,2 +1,4 @@
 pipex
 *.o
+./pipextester/**/
+outfile

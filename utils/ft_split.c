@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 16:07:53 by llopes-n          #+#    #+#             */
-/*   Updated: 2022/03/10 19:52:09 by coder            ###   ########.fr       */
+/*   Updated: 2022/03/17 22:30:37 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,6 @@ char	**ft_split(char const *str, char chr)
 		str += num_lettlers + 1;
 		array++;
 	}
-	matrix[array] = '\0';
+	matrix[array] = 0;
 	return (matrix);
 }

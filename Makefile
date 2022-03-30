@@ -1,9 +1,9 @@
 NAME 			= pipex
 CC				= gcc
-FLAGS			= -Wall -Wextra -Werror
+FLAGS			= -Wall -Wextra -Werror -g
 RM				= rm -rf
 
-SRC_F 			= main.c childs.c error.c free.c
+SRC_F 			= main.c childs.c error.c free.c init.c
 SRC				= $(addprefix ./src/, $(SRC_F))
 OBJ_S			= $(SRC:.c=.o)
 
@@ -27,6 +27,9 @@ $(NAME): $(OBJ_S) $(OBJ_F)
 	@ echo $(CURSIVE) $(YELLOW) " -Making Objects: $(OBJ_S) $(OBJ_F)" $(NONE)
 	@ $(CC) $(OBJ_S) $(OBJ_F) -o $(NAME)
 	@ echo $(GREEN) " - Objects Created !" $(NONE)
+
+valgrind:
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --log-file=log_valgrind -s ./$(NAME) file1 "cat" "tr [a-z] [A-Z]" outfile
 
 clean:
 	@ echo $(RED) " - Deleting Objects: $(OBJ_F)" $(NONE)
