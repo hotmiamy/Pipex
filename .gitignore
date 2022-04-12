@@ -2,4 +2,3 @@ pipex
 *.o
 pipextester/
 outfile
-libft/.git
