@@ -3,13 +3,11 @@ CC				= gcc
 FLAGS			= -Wall -Wextra -Werror -g
 RM				= rm -rf
 
-SRC_F 			= main.c childs.c error.c free.c init.c
+SRC_F 			= main.c childs.c error.c free.c init.c treat_cmd.c
 SRC				= $(addprefix ./src/, $(SRC_F))
 OBJ_S			= $(SRC:.c=.o)
 
-FUNC_F  		= ft_split.c pipex_utils.c
-FUNC 			= $(addprefix ./utils/, $(FUNC_F))
-OBJ_F			= $(FUNC:.c=.o)
+LIBFT = ./libft/libft.a
 
 HEADER_F		= pipex.h
 HEADER			= $(addprefix ./header/, $(HEADER_F))
@@ -23,10 +21,14 @@ all: $(NAME)
 	@ $(CC) $(FLAGS) -c $< -o $@
 	@ echo $(GREEN) " - Compiled !" $(NONE)
 
-$(NAME): $(OBJ_S) $(OBJ_F)
+$(NAME): $(OBJ_S) $(OBJ_F) $(LIBFT)
 	@ echo $(CURSIVE) $(YELLOW) " -Making Objects: $(OBJ_S) $(OBJ_F)" $(NONE)
-	@ $(CC) $(OBJ_S) $(OBJ_F) -o $(NAME)
+	@ $(CC) $(OBJ_S) $(LIBFT) -o $(NAME)
 	@ echo $(GREEN) " - Objects Created !" $(NONE)
+
+$(LIBFT):
+	@ echo $(CURSIVE) $(YELLOW) " - Compiling $(LIBFT)..." $(NONE)
+	@ make all -C ./libft
 
 valgrind:
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --log-file=log_valgrind -s ./$(NAME) file1 "cat" "tr [a-z] [A-Z]" outfile

@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 20:32:01 by coder             #+#    #+#             */
-/*   Updated: 2022/03/30 23:17:21 by coder            ###   ########.fr       */
+/*   Updated: 2022/04/11 22:36:19 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@ void	close_pipe(t_pipex *pipex)
 int	main(int argc, char *argv [], char *envp [])
 {
 	t_pipex	pipex;
-	int		exit_codepid1;
-	int		exit_codepid2;
 
 	pipex.exit_code = 0;
 	if (argc != 5)
-		error_exit("Invalid number of arguments \n", 1);
+	{
+		perror("Invalid number of arguments \n");
+		exit(1);
+	}
 	open_files(&pipex, argv, argc);
 	get_env(&pipex, envp);
 	pipex.pid1 = fork();
@@ -36,11 +37,9 @@ int	main(int argc, char *argv [], char *envp [])
 	if (pipex.pid2 == 0)
 		pid2(&pipex, argv, envp);
 	close_pipe(&pipex);
-	waitpid(pipex.pid1, &exit_codepid1, WUNTRACED);
-	waitpid(pipex.pid2, &exit_codepid2, 0);
+	waitpid(pipex.pid1, &pipex.exit_code, 0);
+	waitpid(pipex.pid2, &pipex.exit_code, 0);
 	free_matrix(pipex.all_cmd_path);
 	close_fds(&pipex);
-	if (exit_codepid2 > 0)
-		pipex.exit_code = exit_codepid2;
-	return (pipex.exit_code);
+	return (WEXITSTATUS(pipex.exit_code));
 }

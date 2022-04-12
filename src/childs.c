@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 00:08:24 by coder             #+#    #+#             */
-/*   Updated: 2022/03/28 22:39:29 by coder            ###   ########.fr       */
+/*   Updated: 2022/04/11 22:37:56 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,54 +32,34 @@ char	*get_command(char **cmd_paths, char *arg_cmd)
 
 void	pid1(t_pipex *pipex, char *argv [], char **envp)
 {
-	char	*error_msg;
-
 	dup2(pipex->pipe[STDOUT_FILENO], STDOUT_FILENO);
 	close(pipex->pipe[STDIN_FILENO]);
 	if (dup2(pipex->infile, STDIN_FILENO) == -1)
 	{
 		free_matrix(pipex->all_cmd_path);
 		close(pipex->outfile);
-		exit(-1);
+		exit(1);
 	}
-	pipex->cmd_arg = ft_split(argv[2], ' ');
+	treat_cmd(pipex, argv[2]);
 	pipex->cmd = get_command(pipex->all_cmd_path, pipex->cmd_arg[0]);
 	if (!pipex->cmd)
-	{
-		error_msg = ft_strdup(pipex->cmd_arg[0]);
-		perror(error_msg);
-		close_fds(pipex);
-		free_matrix(pipex->all_cmd_path);
-		free_matrix(pipex->cmd_arg);
-		free(error_msg);
-		exit(127);
-	}
+		error_exit(pipex->cmd_arg[0], 127, pipex);
 	execve(pipex->cmd, pipex->cmd_arg, envp);
 }
 
 void	pid2(t_pipex *pipex, char *argv [], char **envp)
 {
-	char	*error_msg;
-
 	dup2(pipex->pipe[STDIN_FILENO], STDIN_FILENO);
 	close(pipex->pipe[STDOUT_FILENO]);
 	if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
 	{
 		free_matrix(pipex->all_cmd_path);
 		close(pipex->infile);
-		exit(-1);
+		exit(1);
 	}
-	pipex->cmd_arg = ft_split(argv[3], ' ');
+	treat_cmd(pipex, argv[3]);
 	pipex->cmd = get_command(pipex->all_cmd_path, pipex->cmd_arg[0]);
 	if (!pipex->cmd)
-	{
-		error_msg = ft_strdup(pipex->cmd_arg[0]);
-		perror(error_msg);
-		close_fds(pipex);
-		free_matrix(pipex->all_cmd_path);
-		free_matrix(pipex->cmd_arg);
-		free(error_msg);
-		exit(127);
-	}
+		error_exit(pipex->cmd_arg[0], 127, pipex);
 	execve(pipex->cmd, pipex->cmd_arg, envp);
 }
