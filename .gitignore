@@ -1,5 +1,5 @@
 pipex
 *.o
-pipextester/*
+pipextester/
 outfile
 libft/.git
