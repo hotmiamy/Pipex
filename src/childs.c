@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 00:08:24 by coder             #+#    #+#             */
-/*   Updated: 2022/04/11 22:37:56 by coder            ###   ########.fr       */
+/*   Updated: 2022/04/13 22:32:39 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	pid1(t_pipex *pipex, char *argv [], char **envp)
 	treat_cmd(pipex, argv[2]);
 	pipex->cmd = get_command(pipex->all_cmd_path, pipex->cmd_arg[0]);
 	if (!pipex->cmd)
-		error_exit(pipex->cmd_arg[0], 127, pipex);
+		error_exit(pipex->cmd_arg[0], ": command not found\n", 127, pipex);
 	execve(pipex->cmd, pipex->cmd_arg, envp);
 }
 
@@ -60,6 +60,6 @@ void	pid2(t_pipex *pipex, char *argv [], char **envp)
 	treat_cmd(pipex, argv[3]);
 	pipex->cmd = get_command(pipex->all_cmd_path, pipex->cmd_arg[0]);
 	if (!pipex->cmd)
-		error_exit(pipex->cmd_arg[0], 127, pipex);
+		error_exit(pipex->cmd_arg[0], ": command not found\n", 127, pipex);
 	execve(pipex->cmd, pipex->cmd_arg, envp);
 }

@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 02:02:16 by coder             #+#    #+#             */
-/*   Updated: 2022/04/11 22:31:22 by coder            ###   ########.fr       */
+/*   Updated: 2022/04/13 22:04:24 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	pid1(t_pipex *pipex, char *argv [], char **envp);
 void	pid2(t_pipex *pipex, char *argv [], char **envp);
 void	free_matrix(char **matrix);
 void	free_ptr(char **ptr);
-void	error_exit(char *msg, int exit_code, t_pipex *pipex);
+void	error_exit(char *cmd, char *msg, int exit_code, t_pipex *pipex);
 void	open_files(t_pipex *pipex, char **argv, int argc);
 void	get_env(t_pipex *pipex, char **envp);
 void	close_fds(t_pipex *pipex);
