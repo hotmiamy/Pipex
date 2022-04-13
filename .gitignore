@@ -2,3 +2,4 @@ pipex
 *.o
 pipextester/
 outfile
+./libft/*.a
